@@ -1,0 +1,64 @@
+[package]
+name = "filecoin-proofs"
+description = "The Filecoin specific aspects of storage-proofs, including a C based FFI, to generate and verify proofs."
+version = "0.6.4"
+authors = ["dignifiedquire <dignifiedquire@gmail.com>", "laser <l@s3r.com>", "porcuquine <porcuquine@users.noreply.github.com>"]
+license = "MIT OR Apache-2.0"
+edition = "2018"
+repository = "https://github.com/filecoin-project/rust-fil-proofs"
+readme = "README.md"
+
+[dependencies]
+storage-proofs = { version = "^0.6", path = "../storage-proofs" }
+bitvec = "0.5"
+chrono = "0.4"
+rand = "0.4"
+failure = "0.1"
+lazy_static = "1.2"
+memmap = "0.7"
+colored = "1.6"
+pbr = "1.0"
+tempfile = "3"
+byteorder = "1"
+itertools = "0.8"
+serde_cbor = "0.9.0"
+serde = { version = "1", features = ["rc", "derive"] }
+serde_json = "1.0"
+regex = "1"
+ff = "0.4.0"
+blake2b_simd = "0.5"
+phase21 = "0.3"
+bellperson = "0.3"
+paired = "0.15"
+fil-sapling-crypto = "0.1.2"
+clap = "2"
+log = "0.4.7"
+pretty_env_logger = "0.3.0"
+env_proxy = "0.3"
+os_type = "2.2.0"
+flate2 = { version = "1.0.9", features = ["rust_backend"]}
+tar = "0.4.26"
+rayon = "1.1.0"
+uuid = "0.7"
+
+[dependencies.reqwest]
+version = "0.9"
+default-features = false
+features = ["default-tls-vendored"]
+
+[dev-dependencies]
+gperftools = "0.2"
+criterion = "0.2"
+rexpect = "0.3.0"
+
+[features]
+default = []
+cpu-profile = []
+heap-profile = []
+simd = ["storage-proofs/simd"]
+asm = ["storage-proofs/asm"]
+gpu = ["storage-proofs/gpu", "bellperson/gpu", "fil-sapling-crypto/gpu", "phase21/gpu"]
+
+[[bench]]
+name = "preprocessing"
+harness = false

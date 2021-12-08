@@ -1,0 +1,9 @@
+[workspace]
+
+members = [
+  "fil-proofs-tooling",
+  "filecoin-proofs",
+  "storage-proofs",
+  "sector-builder",
+  "fil-rpc"
+]

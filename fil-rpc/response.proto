@@ -1,0 +1,155 @@
+syntax = "proto3";
+
+import "rustproto.proto";
+
+option (rustproto.expose_oneof_all) = true;
+option (rustproto.expose_fields_all) = true;
+option (rustproto.generate_accessors_all) = true;
+//option (rustproto.carllerche_bytes_for_bytes_all) = true;
+//option (rustproto.carllerche_bytes_for_string_all) = true;
+option (rustproto.repeated_field_vec_all) = true;
+option (rustproto.singular_field_option_box_all) = true;
+option (rustproto.serde_derive_all) = true;
+
+enum FilResponseStatus {
+    NoError = 0;
+    UnclassifiedError = 1;
+    CallerError = 2;
+    ReceiverError = 3;
+}
+
+enum FilSealStatus {
+    Sealed = 0;
+    Pending = 1;
+    Failed = 2;
+    Sealing = 3;
+}
+
+enum FilSealedSectorHealth {
+    Unknown = 0;
+    Ok = 1;
+    ErrorInvalidChecksum = 2;
+    ErrorInvalidLength = 3;
+    ErrorMissing = 4;
+}
+
+message FilAddPieceResponse {
+    uint64 SectorId = 1;
+    FilResponseStatus Status = 2;
+    string ErrorMsg = 3;
+}
+
+message FilGetMaxUserBytesPerStagedSectorResponse {
+    uint64 SectorSize = 1;
+}
+
+message FilPieceMetadata {
+    string PieceKey = 1;
+    uint64 NumBytes = 2;
+    bytes CommP = 3;
+    bytes PieceInclusionProof = 4;
+}
+
+message FilSealedSectorMetadata {
+    uint64 SectorId = 1;
+    string SectorAccess = 2;
+    repeated FilPieceMetadata Pieces = 3;
+    bytes CommRs = 4;
+    bytes CommR = 5;
+    bytes CommD = 6;
+    bytes Proof = 7;
+    bytes SealedData = 8;
+    FilSealedSectorHealth Health = 9;
+}
+
+message FilStagedSectorMetadata {
+    uint64 SectorId = 1;
+    string SectorAccess = 2;
+    repeated FilPieceMetadata Pieces = 3;
+    FilSealStatus Status = 4;
+    bytes StagedData = 5;
+}
+
+message FilGetSealStatusResponse {
+    FilSealedSectorMetadata SealMetaData = 1;
+    FilSealStatus SealStatus = 2;
+    FilResponseStatus Status = 3;
+    string ErrorMsg = 4;
+}
+
+message FilGetSealedSectorsResponse {
+    repeated FilSealedSectorMetadata MetaData = 1;
+    FilResponseStatus Status = 2;
+    string ErrorMsg = 3;
+}
+
+message FilGetStagedSectorsResponse {
+    repeated FilStagedSectorMetadata MetaData = 1;
+    FilResponseStatus Status = 2;
+    string ErrorMsg = 3;
+}
+
+message FilGeneratePoStResponse {
+    bytes Proofs = 1;
+    FilResponseStatus Status = 5;
+    string ErrorMsg = 6;
+}
+
+message FilInitSectorBuilderResponse {
+    FilResponseStatus Status = 1;
+    string ErrorMsg = 2;
+}
+
+message FilReadPieceFromSealedSectorResponse {
+    bytes Data = 1;
+    FilResponseStatus Status = 2;
+    string ErrorMsg = 3;
+}
+
+message FilSealAllStagedSectorsResponse {
+    FilResponseStatus Status = 1;
+    string ErrorMsg = 2;
+}
+
+message FilSealResponse {
+    bytes ProverId = 1;
+    uint64 SectorId = 2;
+    bytes CommR = 3;
+    bytes CommRs = 4;
+    bytes CommD = 5;
+    bytes Proof = 6;
+    repeated bytes CommPs = 7;
+    repeated FilPieceMetadata Pieces = 8;
+    bytes Data = 9;
+    FilResponseStatus Status = 10;
+    string ErrorMsg = 11;
+}
+
+message FilSealCallBackResponse {
+    FilResponseStatus Status = 1;
+    string ErrorMsg = 2;
+}
+
+message FilVerifyPieceResponse {
+    bool IsValid = 1;
+    uint64 Status = 2;
+    string ErrorMsg = 3;
+}
+
+message FilVerifySealResponse {
+    bool IsValid = 1;
+    uint64 Status = 2;
+    string ErrorMsg = 3;
+}
+
+message FilVerifyPoStResponse {
+    bool IsValid = 1;
+    uint64 Status = 2;
+    string ErrorMsg = 3;
+}
+
+message FilGeneratePieceCommitentResponse{
+    bytes Data = 1;
+    FilResponseStatus Status = 2;
+    string ErrorMsg = 3;
+}

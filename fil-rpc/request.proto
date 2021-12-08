@@ -1,0 +1,132 @@
+syntax = "proto3";
+
+import "rustproto.proto";
+import "response.proto";
+
+option (rustproto.expose_oneof_all) = true;
+option (rustproto.expose_fields_all) = true;
+option (rustproto.generate_accessors_all) = true;
+//option (rustproto.carllerche_bytes_for_bytes_all) = true;
+//option (rustproto.carllerche_bytes_for_string_all) = true;
+option (rustproto.repeated_field_vec_all) = true;
+option (rustproto.singular_field_option_box_all) = true;
+option (rustproto.serde_derive_all) = true;
+
+message FilAddPieceRequest {
+    string PieceKey = 1;
+    uint64 PieceBytesAmount = 2;
+    string PiecePath = 3;
+    uint64 SecondsSinceEpoch = 4;
+}
+
+message FilAddPieceExtendRequest {
+    string PieceKey = 1;
+    uint64 PieceBytesAmount = 2;
+    bytes data = 3;
+}
+
+message FilGetMaxUserBytesPerStagedSectorRequest{
+    uint64 SectorSize = 1;
+}
+
+message FilGetSealStatusRequest{
+    uint64 SectorId = 1;
+}
+
+message FilGeneratePoStRequest{
+    repeated bytes CommRs = 1;
+    bytes ChallengeSeed = 2;
+    repeated uint64 Faults = 3;
+}
+
+message FilSectorClass {
+    uint64 SectorSize = 1;
+    uint64 PoRepProofPartitions = 2;
+    uint64 PoStProofPartitions = 3;
+}
+
+message FilInitSectorBuilderRequest{
+    FilSectorClass SectorClass = 1;
+    uint64 LastCommittedSectorId = 2;
+    string MetaDataDir = 3;
+    bytes ProverId = 4;
+    string SealedSectorDir = 5;
+    string StagedSectorDir = 6;
+    uint64 MaxNumStagedSectors = 7;
+}
+
+message FilGetSealedSectorsRequest {
+   bool PerformHealthchecks = 1;
+}
+
+message FilReadPieceFromSealedSectorRequest{
+    string PieceKey = 1;
+}
+
+message FilSealRequest {
+    FilPoRepConfig Config = 1;
+    bytes Data = 2;
+    bytes ProverId = 3;
+    uint64 SectorId = 4;
+    repeated FilPieceMetadata Pieces = 6;
+    repeated uint64 PieceLengths = 5;
+}
+
+message FilGetSoonSealRequest {
+    bool SealAllStagedSectors = 1;
+    bytes ProverId = 2;
+    uint64 SectorSize = 3;
+}
+
+message FilGetSoonSealResponse{
+    repeated FilSealRequest Seals = 1;
+    FilResponseStatus Status = 2;
+    string ErrorMsg = 3;
+}
+
+message FilSealCallBackRequest {
+    FilSealResponse SealResult = 1;
+}
+
+message FilPoRepConfig {
+    uint64 SectorSize = 1;
+    uint64 PoRepProofPartitions = 2;
+}
+
+message FilVerifySealRequest {
+    FilPoRepConfig Config = 1;
+    bytes CommR = 2;
+    bytes CommD = 3;
+    bytes CommRs = 4;
+    bytes ProverId = 5;
+    uint64 SectorId = 6;
+    bytes Proof = 7;
+}
+
+message FilVerifyPieceRequest {
+    bytes PieceInclusionProof = 1;
+    bytes CommD = 2;
+    bytes CommP = 3;
+    uint64 PieceSize = 4;
+    uint64 SectorSize = 5;
+}
+
+message FilPoStConfig {
+    uint64 SectorSize = 1;
+    uint64 PoStProofPartitions = 2;
+}
+
+message FilVerifyPoStRequest{
+    FilPoStConfig Config = 1;
+    repeated uint64 sector_ids = 2;
+    repeated uint64 faulty_sector_ids = 3;
+    repeated bytes CommRs = 4;
+    bytes ChallengeSeed = 5;
+    bytes Proofs = 6;
+    repeated uint64 Faults = 7;
+}
+
+message FilGeneratePieceCommitentRequest {
+    bytes UnpaddedPieceData = 1;
+    uint64 UnpaddedPieceSize =2;
+}

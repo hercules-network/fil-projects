@@ -1,0 +1,38 @@
+syntax = "proto3";
+import "request.proto";
+import "response.proto";
+import "empty.proto";
+
+service FilSealVerifier {
+    rpc VerifySeal(FilVerifySealRequest) returns (FilVerifySealResponse);
+}
+
+service FilPieceVerifier {
+    rpc VerifyPiece(FilVerifyPieceRequest) returns(FilVerifyPieceResponse);
+}
+
+service FilPoStVerifier {
+    rpc VerifyPoSt(FilVerifyPoStRequest) returns (FilVerifyPoStResponse);
+}
+
+
+service FilBuilder {
+    rpc Init(FilInitSectorBuilderRequest) returns (FilInitSectorBuilderResponse);
+    rpc AddPiece(FilAddPieceRequest) returns (FilAddPieceResponse);
+    rpc AddPieceExtend(FilAddPieceExtendRequest) returns (FilAddPieceResponse);
+    rpc ReadPieceFromSealedSector(FilReadPieceFromSealedSectorRequest) returns (FilReadPieceFromSealedSectorResponse);
+    rpc GetSealStatus(FilGetSealStatusRequest) returns (FilGetSealStatusResponse);
+    rpc GetSealedSectors(FilGetSealedSectorsRequest) returns (FilGetSealedSectorsResponse);
+    rpc GetStagedSectors(Empty) returns (FilGetStagedSectorsResponse);
+    rpc SealAllStagedSectors(Empty) returns (FilSealAllStagedSectorsResponse);
+    rpc GetMaxUserBytesPerStagedSector(FilGetMaxUserBytesPerStagedSectorRequest) returns (FilGetMaxUserBytesPerStagedSectorResponse);
+    rpc GetSoonSeal(FilGetSoonSealRequest) returns (FilGetSoonSealResponse);
+    rpc SealCallBack(FilSealCallBackRequest) returns (FilSealCallBackResponse);
+    rpc GeneratePieceCommitent(FilGeneratePieceCommitentRequest) returns (FilGeneratePieceCommitentResponse);
+    rpc GeneratePoSt(FilGeneratePoStRequest) returns (FilGeneratePoStResponse);
+}
+
+service FilRemoteSeal {
+    rpc Seal(FilSealRequest) returns (FilSealResponse);
+}
+
